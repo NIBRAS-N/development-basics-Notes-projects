@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0.5rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+}
+
+nav {
+    border: 2px solid rgba(14, 2, 2, 0.133);
+    border-radius: 2rem;
+    margin: 0 auto 1rem;
+
+    max-width: 600px;
+    font-size: 1.1rem;
+    line-height: 5rem;
+}
+
+h2 {
+    padding: 1rem;
+    border-radius: 2rem 2rem 0 0;
+    background-color: gold;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    border-top: 1px solid black;
+    
+    color: rgba(15, 2, 2, 0.456);
+    
+}
+
+li a,
+li a:visited {
+    color: black;
+}
+
+li a {
+    display: block;
+}
+
+li a:hover,
+li a:focus {
+    background-color: rgba(59, 55, 55, 0.153);
+    color: rgb(90, 100, 100);
+    cursor: pointer;
+}
+li:last-child a{
+    border-radius: 0 0 2rem 2rem;
+}

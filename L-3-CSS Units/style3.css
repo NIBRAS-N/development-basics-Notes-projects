@@ -1,0 +1,48 @@
+/* 
+    - px -> is for fixed size
+    - % -> relative for parents
+    - rem(root elelemt) -> relative element used for font size [1 rem = 16px].
+        - Rem roots er relative e kaj kore.Root browser theke default thake.
+    - em -> parent er relative e kaj kore
+    - ch -> ek line e koto character thake
+    - vw(view width)
+    - vh(view height)
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    border: 3px solid green;
+    width: 60%;
+}
+
+h1 {
+    border: 2px dashed red;
+    width: 50%;
+    /* font-size: 2rem; */
+    padding: 0.5em;
+}
+
+body {
+    min-height: 100vh;
+}
+
+main {
+    font-size: 2rem;
+    width: 30vw;
+    background-color: skyblue;
+}
+
+p {
+    /* 
+        - main element holo root er 2 gon. root jodi 1px hoy, main=16*2*1=32px.
+
+        - em holo main(parent) er 2 gon . parent=32px hole, 32*2=66px
+     */
+    font-size: 1em;
+    width: 60ch;
+}

@@ -1,0 +1,22 @@
+body {
+    padding: 10%;
+    font-size: 1.5rem;
+    font-family: serif;
+}
+
+input,
+button {
+    font: inherit;
+}
+
+p {
+    text-decoration: underline;
+    text-transform: uppercase;
+    text-align: justify;
+    text-indent: 2em;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    word-spacing: 0.9em;
+    font-weight: 200;
+    font-style: oblique;
+}

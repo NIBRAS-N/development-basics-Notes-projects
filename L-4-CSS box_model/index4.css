@@ -1,0 +1,33 @@
+/* 
+    box-sizing: 
+        - content-box;->[default]-> pading margin alada hishab kore.
+        - border-box;->padding margin ekshathe hishab kore
+    Offset->**
+ */
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    border: 3px dashed red;
+    /* width: 400px; */
+    font-size: 1.3rem;
+    padding: 0.9em 0.7em;
+    margin: 1.5em;
+    outline: 4px solid green;
+    outline-offset: 2px;
+}
+/* p{
+    font-size: 1.8em;
+} */
+.circle {
+    border: 2px solid black;
+    background-color: blanchedalmond;
+    width: 201px;
+    height: 201px;
+    margin: 2rem auto ;
+    border-radius: 100px;
+}

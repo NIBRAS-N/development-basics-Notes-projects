@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/*
+body {
+    font-size: 0.5rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    min-height: 200vh;
+}
+
+.outer-container {
+    border: 2px solid grey;
+    height: 85vh;
+    width: 75vw;
+    margin: 4rem;
+    position: relative;
+}
+
+.inner-container {
+    border: 2px solid skyblue;
+    margin: 8rem;
+    width: 40vw;
+    height: 45vh;
+
+}
+
+.box {
+     
+height: 100px;
+width: 100px;
+padding: 1rem;
+color: white;
+}*/
+
+/*
+    - absolute position er boundary holo closest anchestor er relative position
+    - anchestor er position relative na hole full window ke select kore rakhe
+*/
+/* .absolute {
+    background-color: blue;
+    position: absolute;
+    top: 0;
+    
+    right: 0;
+    } 
+*/
+
+/*
+    - Relative position e always parent er shathe relative e thake
+*/
+/* .relative {
+    background-color: skyblue;
+    position: relative;
+    right: 5px;
+    top: 50px;
+    left: 5px;
+
+} */
+
+/* 
+    - fixed position e element always fix thake
+    - z-index use hoy element ke shobar opore annar jonno.
+ */
+/* .fixed {
+    background-color: lightgreen;
+    position: fixed;
+    top: 130px;
+    z-index: 1;
+} */
+
+/*
+    - sticky position e ekta position dewa thake,, scroll er time e oy position e halka sticky hoy thakbe
+ */
+/* .sticky {
+    background-color: cadetblue;
+    position: sticky;
+    top: 0px;
+} */
+html {
+    scroll-behavior: smooth;
+}
+
+section {
+    height: 100vh;
+}
+
+header,
+footer {
+    color: #fff;
+    text-align: center;
+
+    height: 80px;
+
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: greenyellow;
+}
+
+.red {
+    background-color: red;
+}
+
+header {
+    position: sticky;
+    top: 0px;
+    font-size: 2rem;
+}
+
+footer {
+    background-color: black;
+    position: sticky;
+    bottom: 0;
+    font-size: 1.5rem;
+}
+
+h2 {
+    color: crimson;
+    font-size: larger;
+    position: sticky;
+    top: 4.12em;
+
+}
+
+a {
+    color: white;
+}
+
+.social {
+    background-color: royalblue;
+    color: white;
+    padding: 1rem;
+    position: fixed;
+    top: 30%;
+    z-index: 1;
+}

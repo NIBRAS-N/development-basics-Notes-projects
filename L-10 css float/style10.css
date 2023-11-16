@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 1.5rem;
+}
+
+p {
+    padding: 1.5rem 0rem 0rem 0rem;
+    margin: 0rem 0rem 0rem 1rem;
+}
+
+.block {
+    background-color: rgb(8, 5, 1);
+    color: whitesmoke;
+    width: 20vw;
+    height: 20vw;
+    margin: 1.5rem ;
+}
+
+.left {
+    float: left;
+    
+}
+
+.right {
+    float: right;
+    background-color: bisque;
+    height: 30vw;
+    width: 30vw;
+    text-align: center;
+    margin: 1rem 1rem;
+}
+
+.clear {
+    clear: both;
+}
+
+/* how to handle container */
+section{
+    background-color: blue;
+    /* overflow: auto; */
+    display: flow-root;
+    
+}

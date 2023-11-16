@@ -1,0 +1,106 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 5%;
+}
+
+/* 
+    - diplay: flex[coloumn akare niye ashbe content]
+    - justify content : [for desigining]
+
+    -gap
+    -align-items
+    -flex-direction
+
+ */
+
+/* 
+    Handlign container flex
+    - Container er moddhe je kono element ke centre e ante use kora hoy nicher 3 ti element
+        - display:flex;
+        - justify-content:center;
+        - align-items:center;
+ */
+.container {
+    border: 1.3px solid black;
+    min-height: 50rem;
+    max-width: 40rem;
+    margin-inline: auto;
+    background-color: yellow;
+    gap: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    /* 
+        Element ke container er vitor responisve korte flex wrep use kora hoy 
+    */
+    flex-wrap: wrap;
+
+    /* 
+        flex-direction ar flex-wrao ke akshathe evabe lekha hoy:
+
+        flex-flow : [flex-direction][flex-wrap];
+
+     */
+
+    flex-flow: row nowrap;
+
+    /* 
+        row ke opore niche kore align-content
+        align-content:;
+
+      */
+
+    align-content: space-between;
+}
+
+/* 
+    Handling contant flex
+
+*/
+
+.box {
+    background-color: black;
+    height: 70px;
+    color: white;
+    /* min-width: 70px; */
+    font-size: 1.3rem;
+    text-align: center;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* flex-grow is used for container er extra space ke koto toko nibe+screen barle ke koto toko barbe 
+        - 1 mane shob content shoman vabe barbe
+
+	FLex shrink hocche screen komle ke koto gun kombe
+    */
+
+    flex-grow: 1;
+    flex-shrink: 1;
+    /* flex-basis:[alternative of height and width] */
+
+    flex-basis: 90px;
+
+    /* 3 ta ekshathe evabe likha jay
+        flex: [grow shrink basis]
+     */
+    flex:1 1 100px ;
+}
+
+
+
+
+.box:nth-child(2) {
+    /* 3 no element 3 gon barbe */
+    flex:1 3 100px;
+    order: -1;
+}

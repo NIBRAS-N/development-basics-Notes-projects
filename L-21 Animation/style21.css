@@ -1,0 +1,59 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: larger;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    flex-flow: 1;
+    gap: 1rem;
+    margin-top: 20px;
+}
+
+div {
+    border: 2px solid grey;
+    display: grid;
+    place-content: center;
+    width: 90px;
+    height: 200px;
+
+}
+
+div:first-child {
+    background-color: skyblue;
+    /* X axis borabor  */
+    transform:translateX(2px);
+
+    /* Y axis borabor */
+    transform:translateX(2px);
+
+    /* transform:translate(x,y) ahse pashe opore niche shorano jay */
+    /* transform: translate(100%,2px); */
+    /* 
+        100% mane X-axis borabor container er last e chole jabe
+
+     */
+
+    transform: rotateX(180deg);
+
+}
+
+div:nth-child(2) {
+    background-color: rgba(2, 84, 57, 0.604);
+    /* transform: translateX(25%); */
+}
+
+div:nth-child(3) {
+    background-color: rgb(152, 3, 95);
+    /* transform: translateY(1rem); */
+}

@@ -1,0 +1,123 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    font: 2rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    min-height: 100vh;   
+    display: grid;
+    grid-template-columns: repeat(9,1fr);
+    grid-auto-rows: 75px auto 75px;
+    grid-template-areas: 
+        "hd hd hd hd hd hd hd hd hd"
+        "mn mn mn mn mn mn mn sb sb"
+        "ft ft ft ft ft ft ft ft ft"
+    ;
+    column-gap: 0.5rem;
+}
+
+.el{
+    background-color:blueviolet ;
+    color: white;
+    display: grid;
+    place-content: center;
+}
+.header{
+    grid-area: hd;
+}
+.sidebar{
+    grid-area: sb;
+    background-color: burlywood;
+
+}
+.footer{
+    grid-area:ft ;
+    background-color: palevioletred;
+}
+
+/* 
+    container grid item.
+*/
+.container{
+    grid-area: mn;
+    display: grid;
+    /* grid-auto-flow: column; */
+    /* 
+        grid-templete-columns: diye koyta coloumn hobe and prottekta coloumn koto
+        boro hobe oyta hishab korte hobe.
+     */
+     grid-template-columns: 200px 100px 100px;
+     grid-template-columns: 1fr 2fr 1fr;
+     grid-template-columns: 100px 2fr 1fr;
+     /* 
+        repeat(koybar_repeat_hobe, kivabe repeat hobe)
+      */
+    grid-template-columns: repeat(2,2fr 1fr);
+    /*
+        mane 2 ta coloumn 2 bar repeat hobe.
+        first coloumn double kore nibe. second coloumn single kore nibe.
+
+     */
+    /* 
+        grid-auto-rows: minmax(minimum highth koth hobe row er  ,  max_height_koto_hobe)
+     */
+     grid-auto-rows: minmax(150px , auto);
+    /* 
+        gap: row,col
+     */
+    row-gap: 1em;
+    column-gap: 1em;
+    gap:1em 1.8em;
+
+}
+/* 
+    Individual grid item
+*/
+.box{
+    background-color: black;
+    color: white;
+    font-size: 1.8rem;
+    padding: 0.5rem;
+}
+
+.box:first-child{
+    background-color: blue;
+
+    grid-column-start: 1;
+    grid-column-end: 4 ;
+
+    grid-row-start:1 ;
+    grid-row-end: 3;
+
+    /* 
+        oporer golor bolde lekha jay:
+            grid-column:start/end;
+            grid-row:start /end;
+     */
+    grid-column: 1/2;
+    grid-row: 1/4;
+
+}
+
+.box:nth-child(5)
+{
+    background-color: pink;
+    grid-column: 4/5;
+    grid-row: 1/3;
+    display: grid;
+    /* 
+        align-content: opore niche
+        justify-content: ashe pashe
+     */
+    justify-content: start;
+    align-content: end;
+    /* 
+        ey 2 tar bodle use kora jay:
+        place-content: align-content justify-content;
+     */
+     place-content: center end;
+
+}
+

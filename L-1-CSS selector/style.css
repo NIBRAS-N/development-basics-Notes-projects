@@ -1,0 +1,68 @@
+/* 
+    html supports inheritance
+    Means what propterties assigns under html ,, will apply to all its childs
+
+*/
+
+html{
+    /* Everything under html tag will be changed */
+}
+
+main{
+    /* Everything under main tag will be changed */
+}
+
+/* 
+    Rules: CLass has more specificity than element selector.
+
+*/
+/* 
+    Inherit font:
+
+Button , input , textarea , select{
+    font : inherit;
+}
+*/
+
+/* For everything */
+*{
+    font-family:monospace;
+}
+
+/* Element selector */
+body {
+    font-size: 20px;
+
+}
+
+/* !important will make the element most specific \
+Not ideal to use.
+*/
+p {
+    color: violet!important;
+}
+
+/* Group selector */
+h1,
+h2 {
+    color: cornflowerblue;
+}
+
+/* Nested element selector */
+/* Will search span in a paragraph */
+p span {
+
+    text-transform: uppercase;
+    color: blue;
+    background-color: gold;
+}
+
+/* Class selector */
+.gray {
+    color: darkcyan;
+}
+
+/* ID selector */
+#second {
+    font-style: italic;
+}

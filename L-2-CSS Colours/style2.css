@@ -1,0 +1,15 @@
+body {
+    font-size: 18px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    line-height: 1.5;
+    background-color: bisque;
+    /* another type of using background color */
+    /* background-color: rgb(0, 0, 0); */
+}
+
+p {
+    /* Here a indicates the transparancy , Which value is under 0 to 1 */
+    color: rgba(155, 120, 0, 0.8);
+    /* another way of using colours is hexadesimal value */
+    color: #000000;
+}
