@@ -773,7 +773,8 @@
     ```
     
 - ### $lookup;
-
+    - It uses left outer join.
+    - Meanse matching element will come , besides non matched elemenets from left parent document will also come
 ```js
 db.orders.aggregate([
   {
