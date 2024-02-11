@@ -388,4 +388,23 @@
 ]
 ```
 
-- ### 
+- ### all documents that have number in age field , gender female , have "el" in their name:
+
+```jsx
+[
+  {
+    $match:{
+      _id:ObjectId('6595660a27f4241f1acdf9de'),
+      age:{$ne:null},
+  		gender:"female",
+      name:{$regex: new RegExp("el", 'i')}
+    }
+  },
+  // {
+    // $count:"lol"
+    // $sort:{age:-1}
+    // $skip:2
+    // $limit:2
+  //}
+]
+``` 
