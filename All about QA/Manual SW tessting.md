@@ -89,7 +89,8 @@
   - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/bc9d7a01-0b8e-40ed-a688-40771e939c3d)
 
 ### Testing:
-  
+  - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/c934d909-d316-4f3b-8f6f-62114d57c1d5)
+
   - `Static Testing:`
       - Analysis of a program carried out without executing the program.
       - Done during verification process i.e before development
@@ -141,3 +142,26 @@
     - **Sanity Testing :**
         - ( Testing on newly released build → check Compulsory + optional )
     - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/c4500bc4-3ff6-4961-81b6-a242352fcde5)
+
+# part-3
+
+###  QA:
+
+    - quality assurance 
+    - process related 
+    - high level management
+    - Process designed by QA 
+    - Responsible for highest possible quality
+    - It is process related
+    - responsible for preventing defect
+    - 
+### QC:
+
+    - Actual testing of software
+    - quality control 
+    - product related 
+    - actual tester
+    - responsible for finding defect
+    
+### 
+  
