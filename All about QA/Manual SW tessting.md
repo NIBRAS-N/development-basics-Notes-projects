@@ -129,12 +129,29 @@
           - is a type of black-box testing.
       
     - **Non Functional Testing :**
+      
           - checking how many people can simultaneously check out of a shopping basket
-          • Load testing
-          • Reliability
-          • The readiness of a system
-          • Usability testing
-
+          - Load testing – gradually increase the load
+          - Stress testing – suddenly increase the load (Eg. Online filling form)
+          - Volume testing – how much data handle
+          - Reliability
+          - The readiness of a system
+          - Usability testing
+          - Security Testing
+              - Authentication
+              - Authorization
+          - Recovery Testing
+   
+    - **Compatibility**
+        - Forword - upgrade version
+        - Backword - downgrade version
+        - Hardware - hardware support
+        - Installation testing
+        - Uninstallation
+          
+    - **Sanitatoin and garbage**
+        - Bug
+          
     - **Smoke testing :**
         - (Testing on newly released build → compulsary requirement )
         - It is first testing on newly released build
@@ -142,7 +159,25 @@
     - **Sanity Testing :**
         - ( Testing on newly released build → check Compulsory + optional )
     - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/c4500bc4-3ff6-4961-81b6-a242352fcde5)
+    - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/42abbacf-44d6-4903-89ed-7b9198addfb6)
 
+  -![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/ac0c5e51-f07f-4d0d-9efc-d683fe04d9b7)
+
+  - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/6556488f-a149-4bb2-a45a-9dbc97bb2847)
+
+  -![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/64d48cad-c557-4cc5-9de3-075bfa0658b8)
+ 
+  - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/f979f6b9-73b0-43cc-83d7-88a3ee51d797)
+
+  - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/4e670790-82fe-4bd9-b30a-c7a59a564bf4)
+
+  - #### Regression testing:
+    - It is overall testing when ever new change is occurred .
+    - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/642f96b1-c5c0-4e11-be7c-f9c92a136bc7)
+  
+  - #### Re-testing:
+    - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/0de8cd90-4631-4b97-9a27-26369e9ed5ff)
+    
 # part-3
 
 ###  QA:
@@ -163,5 +198,30 @@
     - actual tester
     - responsible for finding defect
     
-### 
+# part - 4:
+
+## Test Case Design Technique:
+
+    - It helps better design and reduce the number of test case to be executed
+    - Reduce data and more coverage
+
+  - Types:
+      - 1. ECP Equivalence Class Partition
+            - value check
+            - classify | divide | partition data in → multiple classes to save testing time
+        3. BVA Boundary value analysis
+        4. Design Table
+        5. State transition
+        6. Error guessing
   
+# part - 5:
+
+- ### STLC: Software Testing Life Cycle:
+    - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/d0ae1bec-d0ea-4f6d-b66a-e7ad0a891fc4)
+    - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/8d8bf0df-9a09-4bb1-a6c6-983c34d216f7)
+
+- ### Requirement Traceblity matrix : (RTM)
+
+  - Trace how many Test case are execuated or covered
+  - in simple keep track of test cases
+  - ![image](https://github.com/NIBRAS-N/development-basics-Notes-projects/assets/83491751/9d8aaee3-255c-4dcb-8d10-fffa04ee0091)
