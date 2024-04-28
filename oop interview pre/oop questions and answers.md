@@ -3,6 +3,12 @@
 - It helps us to think in terms of real world objects.
 - give example of hospital,patients,and doctors
 
+
+# What is Class and Object?
+
+- Class is blurprint.
+- Object is instances of class.
+
 # What are the  4 pillers of OOP?
 
 ### 1. Abstraction:
@@ -104,6 +110,6 @@ console.log(myCar.getSpeed());  // Output: 70
 
 ```
 
-# What is Class and Object?
+
 
 
