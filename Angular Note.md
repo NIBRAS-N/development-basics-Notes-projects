@@ -7,7 +7,8 @@
 - npm install -g @angular/cli
 - ng version
 - npm run start
-
+- ng new my-app
+  
 # In app create folder name `components` and file name `user-profile`:
 
 - ng g c components/user-profile
