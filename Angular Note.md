@@ -298,3 +298,4 @@
 
 - ### **LazyLoading**
     - https://angular.io/guide/lazy-loading-ngmodules
+- ### **Deffarable views**
