@@ -281,9 +281,20 @@
     ```ts
     <h1 appHighlight></h1>
     ```
-- ###  Life Cycle Method:
+- ###  **Life Cycle Method:**
     - constructor()
     - ngOnChanges()
     - ngOnInit()
     - ngOnDestroy()
     - ngAfterViewInit()
+ 
+- ### **Routing:**
+    - Documentation Link:
+        - https://angular.dev/guide/routing
+     
+- ### **Form**
+    - Reactive forms
+    - template-driven form
+
+- ### **LazyLoading**
+    - https://angular.io/guide/lazy-loading-ngmodules
