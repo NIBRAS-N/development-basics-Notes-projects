@@ -2,6 +2,22 @@
 
 - https://angular.dev/tools/cli/setup-local
 
+# Angular File structure:
+  - src
+    - app
+      
+      - core
+        - constant
+        - enums
+        - guards
+        - models
+            - class `[ In form binding time I will use class ]`
+            - interface `[ In other time i will use interface ]`
+        - service
+      - pages
+      - shared
+
+
 # Set up procedure:
 
 - npm install -g @angular/cli
