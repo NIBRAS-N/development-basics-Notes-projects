@@ -16,6 +16,7 @@
         - service
       - pages
       - shared
+  - environment
 
 
 # Set up procedure:
