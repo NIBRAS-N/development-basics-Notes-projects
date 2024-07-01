@@ -143,3 +143,28 @@ export class Department {
 
 ```
 
+# Using another way:
+- must set ts strict rules to false
+```TS
+export class Department {
+  deptId: number = 0;
+  deptName: string = '';
+  deptHeadEmpId: number = 0;
+  createdDate: Date = new Date();
+  deptHeadName: string = '';
+  slNo: number = 0;
+
+  constructor(obj?: any) {
+    if (obj) {
+      Object.keys(this).forEach((key) => {
+        if (obj.hasOwnProperty(key)) {
+          this[key] = obj[key];
+        }
+      });
+    }
+  }
+}
+
+
+```
+
