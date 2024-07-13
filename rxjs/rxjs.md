@@ -318,3 +318,6 @@ export class CombineLatestExampleComponent {
 }
 
 ```
+### take
+
+- `https://rxjs.dev/api/operators/take`
