@@ -1,4 +1,6 @@
-![image](https://github.com/user-attachments/assets/d5bacfab-c959-45ba-b9ed-dc6774f4ae69)# REST api:
+# REST api:
+---
+![image](https://github.com/user-attachments/assets/d5bacfab-c959-45ba-b9ed-dc6774f4ae69)
 ![image](https://github.com/user-attachments/assets/116a45ba-206c-4f08-9d41-9a2c6a4387f9)
 ![image](https://github.com/user-attachments/assets/a3011688-12b9-4caa-b4c1-9cddf40fe43a)
 ![image](https://github.com/user-attachments/assets/eb2ed588-551c-4ed1-9170-8c4e828ec4a4)
@@ -10,6 +12,11 @@
 ![image](https://github.com/user-attachments/assets/17e5fdee-a2f8-439e-bec2-0a282fda41ec)
 ![image](https://github.com/user-attachments/assets/d99b686d-0b9d-4bd9-85fc-5b3147ff81cf)
 
+
+# Controller:
+---
+
+![image](https://github.com/user-attachments/assets/120d78e0-06a4-44b7-978f-def3ffafb91d)
 
 
 
