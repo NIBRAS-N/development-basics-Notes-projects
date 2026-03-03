@@ -1,77 +1,68 @@
-We need to refactor the existing single-table design into a two-table design (Option B) to eliminate data duplication when targets are the same across all branches and months. The new design will use:
-
-  - metadata table: stores common fields (question details, yearly/monthly targets) plus frozen sets of branch IDs and months.
-
-  - details table: stores each branch+month combination, referencing the metadata.
-
-The API should remain backward-compatible where possible, but internal logic will change.
-
-## Step-by-Step Implementation Plan
-
-### 1. Create New Entity Files
 
 
-#### File: src/modules/target-setup/entities/target-setup-metadata.entity.ts
+### We'll implement the single‑table design that matches your new input structure. Follow these steps in order. Each step provides the exact code to add or modify.
 
-```ts
-import { Entity, Column, GeneratedUuidColumn } from '@iaminfinity/express-cassandra';
-import { BaseEntity } from '../../../shared/entities/base-entity';
+New Input Strucure is:
 
-@Entity({
-  table_name: 'target_setup_metadata',
-  key: ['id'],
-})
-export class TargetSetupMetadataEntity extends BaseEntity {
-  @GeneratedUuidColumn()
-  id: any;
-
-  @Column({ type: 'uuid' })
-  year_id: any;
-
-  @Column({ type: 'text' })
-  questions_title: string;
-
-  @Column({ type: 'uuid' })
-  questions_id: any;
-
-  @Column({ type: 'text' })
-  question_number: string;
-
-  @Column({ type: 'int' })
-  yearly_target: number;
-
-  @Column({ type: 'int' })
-  monthly_target: number;
-
-  @Column({ type: 'frozen<set<uuid>>' })
-  branch_ids: Set<any>;  // stored as frozen set
-
-  @Column({ type: 'frozen<set<text>>' })
-  months: Set<string>;
-
-  // BaseEntity provides created_at, updated_at, created_by, updated_by
+[{
+	year_id: uuid
+	component_id:
+	form_id:
+	question_wise_data:[
+		{
+			question_id: uuid	
+			branches: []
+			months: []
+			monthly_target:
+			yearly_target:
+		}
+	]
+	
 }
-```
+]
 
-#### File: src/modules/target-setup/entities/target-setup-details.entity.ts
+## Here is the step by step plan :
+
+# Step 1: Entity Design
+File: src/modules/target-setup/entities/target-setup.entity.ts
+
+Replace the existing entity with this new one. It stores one row per (year_id, question_id, branch_id, month) combination.
+A rule_id groups rows that came from the same input rule
 
 ```ts
-import { Entity, Column, GeneratedUuidColumn } from '@iaminfinity/express-cassandra';
+import {
+  Column,
+  Entity,
+  GeneratedUuidColumn,
+} from '@iaminfinity/express-cassandra';
 import { BaseEntity } from '../../../shared/entities/base-entity';
 
 @Entity({
-  table_name: 'target_setup_details',
-  key: [['year_id'], 'questions_id', 'branch_id', 'month'],
+  table_name: 'target_setup',
+  key: [['year_id'], 'question_id', 'branch_id', 'month'],
+  // Optional materialized view for querying by rule_id
+  materialized_views: {
+    target_setup_by_rule: {
+      key: [['rule_id'], 'year_id', 'question_id', 'branch_id', 'month'],
+      select: ['*'],
+    },
+  },
 })
-export class TargetSetupDetailsEntity extends BaseEntity {
+export class TargetSetupEntity extends BaseEntity {
   @GeneratedUuidColumn()
-  id: any;   // optional, but useful for referencing
+  id?: any; // auto-generated, not part of primary key
 
   @Column({ type: 'uuid' })
   year_id: any;
 
   @Column({ type: 'uuid' })
-  questions_id: any;
+  component_id: any;
+
+  @Column({ type: 'uuid' })
+  form_id: any;
+
+  @Column({ type: 'uuid' })
+  question_id: any;
 
   @Column({ type: 'uuid' })
   branch_id: any;
@@ -79,45 +70,318 @@ export class TargetSetupDetailsEntity extends BaseEntity {
   @Column({ type: 'text' })
   month: string;
 
+  @Column({ type: 'int' })
+  yearly_target: number;
+
+  @Column({ type: 'int' })
+  monthly_target: number;
+
   @Column({ type: 'uuid' })
-  metadata_id: any;   // references metadata.id
+  rule_id: any; // groups rows from the same rule
 }
 ```
 
-### 2. Update DTOs (Optional – Keep Existing but Adjust Validation)
+#### Important:
 
-We will keep the existing DTOs unchanged to maintain API contract, but we'll add validation in the service to ensure consistency.
+- All uuid columns are defined with type 'uuid'. When saving, pass plain string UUIDs – the ORM will convert them automatically.
 
-No changes to:
+- The primary key [['year_id'], 'question_id', 'branch_id', 'month'] allows efficient queries by year, then by question, then by branch, and finally by month.
 
-  - CreateTargetSetupItemDto
-
-  - CreateTargetSetupDto
-
-  - UpdateTargetSetupItemDto
-
-  - UpdateTargetSetupDto
-
-  - TargetSetupResponseDto
-
-But note: TargetSetupResponseDto currently contains all fields. After refactor, we will construct it from metadata+details.
-
-### 3. Update Module Imports
-
-Modify target-setup.module.ts to import the new repositories:
+# Step 2: DTO Design
+Create these new DTO files in src/modules/target-setup/dtos/. They exactly match the JSON structure you provided.
 
 ```ts
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsArray, IsUUID } from 'class-validator';
+
+export class TargetRuleDto {
+  @ApiProperty()
+  @IsNumber()
+  monthly_target: number;
+
+  @ApiProperty()
+  @IsNumber()
+  yearly_target: number;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsUUID('4', { each: true })
+  branchIds: string[];
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  months: string[];
+}
+```
+### 2.1 target-rule.dto.ts
+```
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsArray, IsUUID } from 'class-validator';
+
+export class TargetRuleDto {
+  @ApiProperty()
+  @IsNumber()
+  monthly_target: number;
+
+  @ApiProperty()
+  @IsNumber()
+  yearly_target: number;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsUUID('4', { each: true })
+  branchIds: string[];
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  months: string[];
+}
+
+```
+
+### 2.2 question-target.dto.ts
+```ts
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsUUID, IsArray, ValidateNested } from 'class-validator';
+import { TargetRuleDto } from './target-rule.dto';
+
+export class QuestionTargetDto {
+  @ApiProperty()
+  @IsUUID()
+  question_id: string;
+
+  @ApiProperty({ type: [TargetRuleDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TargetRuleDto)
+  data: TargetRuleDto[];
+}
+```
+
+### 2.3 create-target-entry.dto.ts
+```ts
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsUUID, IsArray, ValidateNested } from 'class-validator';
+import { QuestionTargetDto } from './question-target.dto';
+
+export class CreateTargetEntryDto {
+  @ApiProperty()
+  @IsUUID()
+  year_id: string;
+
+  @ApiProperty()
+  @IsUUID()
+  component_id: string;
+
+  @ApiProperty()
+  @IsUUID()
+  form_id: string;
+
+  @ApiProperty({ type: [QuestionTargetDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => QuestionTargetDto)
+  question_wise_target: QuestionTargetDto[];
+}
+```
+
+### 2.4 create-target-setup.dto.ts
+```ts
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsArray, ValidateNested } from 'class-validator';
+import { CreateTargetEntryDto } from './create-target-entry.dto';
+
+export class CreateTargetSetupDto {
+  @ApiProperty({ type: [CreateTargetEntryDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateTargetEntryDto)
+  entries: CreateTargetEntryDto[];
+}
+```
+Note: The existing TargetSetupResponseDto can remain unchanged – it already matches the flat row structure returned by GET endpoints.
+
+# Step 3: Controller Design
+File: src/modules/target-setup/target-setup.controller.ts
+
+Update the create method to accept the new CreateTargetSetupDto. The GET methods stay exactly as they are – they already call service methods that return flat arrays.
+
+```ts
+import { /* existing imports */ } from '...';
+import { CreateTargetSetupDto } from './dtos/create-target-setup.dto'; // new DTO
+
+@ApiTags('Target Setup APIs')
+@Controller('target-setup')
+export class TargetSetupController {
+  constructor(private readonly targetSetupService: TargetSetupService) {}
+
+  @Post()
+  @HttpCode(HttpStatus.OK)
+  @ApiGuard()
+  @ApiOkResponse({ type: () => SwaggerResponseType(TargetSetupResponseDto, true) })
+  @UseInterceptors(LogsInterceptor)
+  public create(
+    @Body() body: CreateTargetSetupDto,   // <-- new DTO
+    @CurrentUser('user_id') userId: string,
+  ): Observable<{ result: string; resultset: any }> {
+    return this.targetSetupService.create(body, userId).pipe(
+      map(result => ({
+        result: 'ok',
+        resultset: result,
+      })),
+    );
+  }
+
+  // GET methods remain unchanged
+  // ...
+}
+```
+No changes needed for the GET endpoints – they already use the correct query parameters and service methods.
+
+# Step 4: Service Design
+File: src/modules/target-setup/target-setup.service.ts
+
+Replace the entire service with the implementation below. It uses plain strings for UUIDs to avoid ORM conversion issues, and includes duplicate prevention.
+
+```ts
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { InjectRepository, Repository } from '@iaminfinity/express-cassandra';
+import { from, Observable, of } from 'rxjs';
+import { map, mergeMap, toArray, reduce } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid'; // install: npm install uuid @types/uuid
+import { CreateTargetSetupDto } from './dtos/create-target-setup.dto';
+import { TargetSetupEntity } from './entities/target-setup.entity';
+import { isValidUuid } from './utils/uuid-validation.util'; // keep your existing validator
+
+@Injectable()
+export class TargetSetupService {
+  constructor(
+    @InjectRepository(TargetSetupEntity)
+    private readonly targetRepo: Repository<TargetSetupEntity>,
+  ) {}
+
+  create(dto: CreateTargetSetupDto, userId: string): Observable<any> {
+    const rows: TargetSetupEntity[] = [];
+    const usedCombos = new Set<string>(); // track (year,question,branch,month) within this request
+
+    for (const entry of dto.entries) {
+      const yearId = entry.year_id;
+      if (!isValidUuid(yearId)) throw new BadRequestException('Invalid year_id');
+
+      const componentId = entry.component_id;
+      if (!isValidUuid(componentId)) throw new BadRequestException('Invalid component_id');
+
+      const formId = entry.form_id;
+      if (!isValidUuid(formId)) throw new BadRequestException('Invalid form_id');
+
+      for (const qt of entry.question_wise_target) {
+        const questionId = qt.question_id;
+        if (!isValidUuid(questionId)) throw new BadRequestException('Invalid question_id');
+
+        for (const rule of qt.data) {
+          const ruleId = uuidv4(); // generate a unique rule_id for this group
+
+          for (const branchId of rule.branchIds) {
+            if (!isValidUuid(branchId)) throw new BadRequestException('Invalid branch_id in rule');
+
+            for (const month of rule.months) {
+              const comboKey = `${yearId}|${questionId}|${branchId}|${month}`;
+              if (usedCombos.has(comboKey)) {
+                throw new BadRequestException(
+                  `Duplicate target definition for year ${yearId}, question ${questionId}, branch ${branchId}, month ${month}`,
+                );
+              }
+              usedCombos.add(comboKey);
+
+              const entity = this.targetRepo.create({
+                year_id: yearId,            // plain string – ORM accepts it
+                component_id: componentId,
+                form_id: formId,
+                question_id: questionId,
+                branch_id: branchId,
+                month,
+                yearly_target: rule.yearly_target,
+                monthly_target: rule.monthly_target,
+                rule_id: ruleId,
+                created_by: userId,         // plain string
+                updated_by: userId,
+              });
+              rows.push(entity);
+            }
+          }
+        }
+      }
+    }
+
+    // Save all rows
+    return from(rows).pipe(
+      mergeMap(entity => this.targetRepo.save(entity)),
+      toArray(),
+      map(saved => ({
+        created: saved.length,
+        ruleIds: [...new Set(saved.map(r => r.rule_id))], // unique rule IDs
+      })),
+    );
+  }
+
+  // ---- Query methods (remain largely the same) ----
+
+  findByYear(yearId: string): Observable<TargetSetupEntity[]> {
+    if (!isValidUuid(yearId)) throw new BadRequestException('Invalid year_id');
+    return this.targetRepo.find({ year_id: yearId }, { raw: true });
+  }
+
+  findByYearAndQuestion(yearId: string, questionId: string): Observable<TargetSetupEntity[]> {
+    if (!isValidUuid(yearId) || !isValidUuid(questionId)) throw new BadRequestException('Invalid UUID');
+    return this.targetRepo.find(
+      { year_id: yearId, question_id: questionId },
+      { raw: true }
+    );
+  }
+
+  findByYearQuestionAndBranch(yearId: string, questionId: string, branchId: string): Observable<TargetSetupEntity[]> {
+    if (!isValidUuid(yearId) || !isValidUuid(questionId) || !isValidUuid(branchId)) throw new BadRequestException('Invalid UUID');
+    return this.targetRepo.find(
+      { year_id: yearId, question_id: questionId, branch_id: branchId },
+      { raw: true }
+    );
+  }
+
+  // Optional: find by rule_id using materialized view
+  findByRuleId(ruleId: string): Observable<TargetSetupEntity[]> {
+    if (!isValidUuid(ruleId)) throw new BadRequestException('Invalid rule_id');
+    return this.targetRepo.find(
+      { rule_id: ruleId },
+      { materialized_view: 'target_setup_by_rule', raw: true }
+    );
+  }
+
+  // findById can remain if needed
+  findById(id: string): Observable<TargetSetupEntity | null> {
+    if (!isValidUuid(id)) throw new BadRequestException('Invalid id');
+    return this.targetRepo.findOne({ id }, { raw: true });
+  }
+}
+```
+
+# Step 5: Module Update
+File: src/modules/target-setup/target-setup.module.ts
+
+Update the module to import only the new entity (remove any old entities). It should look like this:
+
+```ts
+import { Module } from '@nestjs/common';
 import { ExpressCassandraModule } from '@iaminfinity/express-cassandra';
-import { TargetSetupMetadataEntity } from './entities/target-setup-metadata.entity';
-import { TargetSetupDetailsEntity } from './entities/target-setup-details.entity';
-// Remove old TargetSetupEntity import
+import { TargetSetupController } from './target-setup.controller';
+import { TargetSetupService } from './target-setup.service';
+import { TargetSetupEntity } from './entities/target-setup.entity';
 
 @Module({
   imports: [
-    ExpressCassandraModule.forFeature(
-      [TargetSetupMetadataEntity, TargetSetupDetailsEntity],
-      'idp'
-    ),
+    ExpressCassandraModule.forFeature([TargetSetupEntity], 'idp'),
   ],
   controllers: [TargetSetupController],
   providers: [TargetSetupService],
@@ -126,87 +390,19 @@ import { TargetSetupDetailsEntity } from './entities/target-setup-details.entity
 export class TargetSetupModule {}
 ```
 
-### 4. Update Service (target-setup.service.ts)
+# Step 6: Testing
+After applying all changes, restart your application and test the endpoints.
 
-Inject both repositories:
+POST /target-setup with your sample payload (only one entry, one rule). Expect a response like:
 ```ts
-@InjectRepository(TargetSetupMetadataEntity)
-private readonly metadataRepo: Repository<TargetSetupMetadataEntity>,
-
-@InjectRepository(TargetSetupDetailsEntity)
-private readonly detailsRepo: Repository<TargetSetupDetailsEntity>,
+{
+  "result": "ok",
+  "resultset": {
+    "created": 1,          // number of rows created (for your sample: 1)
+    "ruleIds": ["generated-uuid-here"]
+  }
+}
 ```
-4.1 Create Method
-  - Accept CreateTargetSetupDto as before.
-      
-  - Validate that all items in targets array have the same questions_title, questions_id, question_number, yearly_target, monthly_target. If not, throw BadRequestException.
-      
-  - Extract unique branch IDs and months from the items.
-      
-  - Create a metadata entity with the common fields and the sets.
-      
-  - Save metadata.
-      
-  - For each unique combination of branch_id and month, create a details entity with the same year_id, questions_id, and reference metadata_id.
-      
-  - Save all details (use Promise.all or forkJoin with observables). Return an array of created details (with their ids) to match the old return type.
-    
-4.2 Update Method
-    
-- Accept UpdateTargetSetupDto.
-    
-- For each item in targets:
-    
-- Fetch details by item.id using detailsRepo.findOne({ id: toUuidOrThrow(item.id) }).
-    
-- If not found, mark as unsuccessful.
-    
-- Otherwise, get metadata_id from details, then fetch metadata.
-    
-- Update metadata's yearly_target and/or monthly_target if provided in the item.
-    
-- Save metadata.
-    
-- Note: If multiple items belong to the same metadata, we will update the metadata multiple times. To avoid redundant saves, we can collect unique metadata ids and update each once, but that adds complexity. For simplicity, we'll update per item; it's acceptable because metadata updates are idempotent and rare.
-    
-- Return summary of successful/unsuccessful ids (the details ids).
+GET /target-setup?year_id=... should return a flat array of rows, matching the old response format.
 
-4.3 Find Methods:
-
-- findById(id: string): fetch details, then metadata, then combine.
-
-- findByYear(year_id): fetch details (by year_id), collect metadata_ids, fetch all metadata in one query (IN clause), then merge in code.
-
-- findByYearAndQuestion(year_id, questions_id): similar.
-
-- findByYearQuestionAndBranch(year_id, questions_id, branch_id): similar.
-
-##### Create a helper function
-    combineDetailsWithMetadata(details: TargetSetupDetailsEntity[], metadataMap: Map<string, TargetSetupMetadataEntity>) 
-  that returns an array of objects matching the old entity shape (all fields). This will be used in all GET endpoints.
-
-### 5. Update Controller
-   
-  The controller methods can remain largely unchanged. They call service methods and map responses.
-  However, we need to ensure that the create endpoint returns the ids of created details (which it already does).
-  The update endpoint also returns details ids.
-
-  The get endpoints return arrays of combined objects. The response DTO TargetSetupResponseDto already has all fields, so no change needed there.
-
-### 6. Remove Old Entity and Repository
-  - After  code changes, remove TargetSetupEntity and its repository from the module. Also remove any unused imports
-
-
-### 7. Testing
-
-- Test create with a payload containing multiple branches and months. Verify that metadata is created once and details for each combination.
-
-- Test get by year, year+question, year+question+branch – ensure returned data matches old shape.
-
-- Test update of targets – verify that all details under the same metadata reflect the new values.
-
-- Test update of a single detail id – verify metadata updates and all details change.
-
-### 8. Update Swagger Documentation (Optional)
-- If needed, update the API documentation to reflect that targets are shared across branches/months.
-
+If you encounter any uuid object errors, double‑check that you are passing plain strings to this.targetRepo.create(). The isValidUuid function should remain as a validator, not a converter.
